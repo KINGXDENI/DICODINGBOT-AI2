@@ -27,7 +27,15 @@ const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream
 const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
-
+const app = express();
+app.use(express.json());
+app.get('/', (req, res) => {
+  res.send('Welcome');
+});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Bot listening on port ${PORT}`);
+});
 function smsg(conn, m, store) {
   if (!m) return m;
   let M = proto.WebMessageInfo;
@@ -250,15 +258,7 @@ async function startHisoka() {
         startHisoka();
       }
     } else if (connection === "open") {
-      const app = express();
-      app.use(express.json());
-      app.get('/', (req, res) => {
-        res.send('Welcome');
-      });
-      const PORT = process.env.PORT || 3000;
-      app.listen(PORT, () => {
-        console.log(`Bot listening on port ${PORT}`);
-      });
+      
       const botNumber = await client.decodeJid(client.user.id);
       console.log(color("Bot success conneted to server", "green"));
       console.log(color("Donate for creator https://saweria.co/sansekai", "yellow"));
