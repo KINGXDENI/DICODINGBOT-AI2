@@ -13,6 +13,7 @@ const {
   fetchLatestWaWebVersion
 } = require("@adiwajshing/baileys");
 const pino = require("pino");
+const express = require("express");
 const { Boom } = require("@hapi/boom");
 const fs = require("fs");
 const axios = require("axios");
@@ -249,6 +250,15 @@ async function startHisoka() {
         startHisoka();
       }
     } else if (connection === "open") {
+      const app = express();
+      app.use(express.json());
+      app.get('/', (req, res) => {
+        res.send('Welcome');
+      });
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () => {
+        console.log(`Bot listening on port ${PORT}`);
+      });
       const botNumber = await client.decodeJid(client.user.id);
       console.log(color("Bot success conneted to server", "green"));
       console.log(color("Donate for creator https://saweria.co/sansekai", "yellow"));
